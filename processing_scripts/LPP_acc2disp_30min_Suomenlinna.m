@@ -38,8 +38,9 @@ acc=ncread(Fn,'acc');
 acc_time=ncread(Fn,'time');
 
 %% Calculate wanted UTC start times that cover the deployment
-time1=time0+seconds(acc_time(end)/1000);
-timevec=[roundto30min(time0)-minutes(desired_length):minutes(desired_length):roundto30min(time1)+minutes(desired_length)]'; % This only works with 30 minute blocks!!!
+time_start=time0+seconds(acc_time(1)/1000);
+time_end=time0+seconds(acc_time(end)/1000);
+timevec=[roundto30min(time_start)-minutes(desired_length):minutes(desired_length):roundto30min(time_end)+minutes(desired_length)]'; % This only works with 30 minute blocks!!!
 
 %% Read blocks 
 %Allow for FIR and transience and shift the desired UTC times to LP-times

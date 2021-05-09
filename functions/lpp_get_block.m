@@ -36,7 +36,7 @@ for n=1:length(query_time)
     %ind1=find(query_time_rel+block_length*1000>signal_time,1,'last');
     ind1=ind0+block_length-1;
     %if ~(isempty(ind0) || isempty(ind1) || abs(query_time_rel-signal_time(ind0))>dt || abs(query_time_rel+block_length*1000-signal_time(ind1))>dt)
-    if ~(isempty(ind0) || ind1>size(signal,1))
+    if ~(isempty(ind0) || abs(query_time_rel-signal_time(ind0))>dt || ind1>size(signal,1))
         try 
             block(:,ct)=signal(ind0:ind1);
             block_time(:,ct)=signal_time(ind0:ind1);

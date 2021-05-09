@@ -27,11 +27,15 @@ defaultName = [];
 defaultDepth = [];
 defaultRunIndex = [];
 defaultNote = [];
+defaultSource = 'LainePoiss wave buoy';
+defaultInstitution = 'Department of Marine Systems, Tallinn University of Technology';
 
 p = inputParser;
 addRequired(p,'Filename', @ischar);
 addRequired(p,'Signal', @validSignal);
 addRequired(p,'Time0',@isdatetime);
+addParameter(p,'institution',defaultInstitution, @ischar);
+addParameter(p,'source',defaultSource, @ischar);
 addParameter(p,'fs',defaultFs, @isnumeric);
 addParameter(p,'longitude',defaultLongitude,@isnumeric);
 addParameter(p,'latitude',defaultLatitude,@isnumeric);
@@ -57,13 +61,11 @@ parse(p,filename,signal,time0,varargin{:});
 NC_GLOBAL = netcdf.getConstant('NC_GLOBAL');
 
 % Set attributes
-netcdf.putAtt(ncid, NC_GLOBAL,'institution','Department of Marine Systems, Tallinn University of Technology');
-netcdf.putAtt(ncid, NC_GLOBAL,'source','LainePoiss wave buoy');
 netcdf.putAtt(ncid, NC_GLOBAL,'sampling_freq',p.Results.fs);
 netcdf.putAtt(ncid, NC_GLOBAL,'CreationDate',datestr(now,'yyyy-mm-ddTHH:MM:SS'));
 
 %% Optional attributes
-fns={'longitude','latitude','name','depth','run_index','note'};
+fns={'institution','source','longitude','latitude','name','depth','run_index','note'};
 for n=1:length(fns)
     fn=fns{n};
    if ~isempty(p.Results.(fn))
