@@ -1,5 +1,4 @@
 function rf=lpp_response(f,varargin)
-
 %lpp_response: Calculate the response function for given linear frequency f. 
 %Example: rf = lpp_response(f)
 % ------------------------------------------------------------------------------------------------------
