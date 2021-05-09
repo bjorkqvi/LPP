@@ -1,11 +1,11 @@
 function lpp_write_netcdf_spec(filename,spec,time0,varargin)
-%lpp_write_netcdf_raw(filename,signal,time0,varargin)
-%Example: lpp_write_netcdf_raw('Suomenlinna_2020_depl_04_01.nc',signal,time0,'fs',5.12,'name','Suomenlinna','run_index','2020_depl_04_01')
+%lpp_write_netcdf_spec(filename,spec,time0,varargin)
+%Example: lpp_write_netcdf_raw('Suomenlinna_2020_depl_04_01.nc',spec,time0,'fs',5.12,'name','Suomenlinna','run_index','2020_depl_04_01')
 % -------------------------------------------------------------------------------------------------------------------------------
 % Input:
 % [Required]
 %   filename = String
-%   signal = Matrix with signal (n x t) with n = samples and t = e.g. 30 min blocks
+%   spec = struct with fields .f and .psd
 %   time0 = datetime. Starting time of each block.
 % [Optional]
 %   'fs': Sampling frequency [Hz] (default = 5.12).
@@ -21,6 +21,7 @@ function lpp_write_netcdf_spec(filename,spec,time0,varargin)
 % This function is a part of the LainePoiss Processing package.
 % Jan-Victor Björkqvist & Victor Alari (2021)
 % -------------------------------------------------------------------------------------------------------------------------------
+
 %% Parsing input
 defaultFs = 5.12; % Sampling frequency [Hz]
 defaultF0 = 0.05; % Lowest frequency to use [Hz] (default 0.05)
@@ -103,7 +104,7 @@ dimid.f = netcdf.defDim(ncid,'f',Nfreq);
 varid = netcdf.defVar(ncid,'time','double',dimid.T);         
 netcdf.putAtt(ncid,varid,'standard_name','time');
 netcdf.putAtt(ncid,varid,'long_name','starting time of each spectra');
-netcdf.putAtt(ncid,varid,'units','milliseconds since 1970-01-01T00:00:00');
+netcdf.putAtt(ncid,varid,'units','seconds since 1970-01-01T00:00:00');
 netcdf.defVarFill(ncid,varid,false,fillValue);
 netcdf.putVar(ncid,varid,posixtime(time0));
 

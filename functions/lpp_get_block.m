@@ -8,7 +8,7 @@ function [block, block_time]=lpp_get_block(signal,signal_time,time0,query_time,b
 %   signal_time = Time vector for signal, given as ms since time0
 %   time0 = Start time of deployment
 %   query_time = Wanted starting times for blocks (datetime vector)
-%   block_length = desired blocklength (in seconds)
+%   block_length = desired blocklength (in points)
 % ---------------------------------------------------------------------------------------------------------
 % Output:
 %  block = Block of data
@@ -33,9 +33,10 @@ for n=1:length(query_time)
     query_time_rel=seconds(query_time(n)-time0)*1000; % Relative query times in milliseconds
 
     ind0=find(query_time_rel<=signal_time,1,'first');
-    ind1=find(query_time_rel+block_length*1000>signal_time,1,'last');
-
-    if ~(isempty(ind0) || isempty(ind1) || abs(query_time_rel-signal_time(ind0))>dt || abs(query_time_rel+block_length*1000-signal_time(ind1))>dt)
+    %ind1=find(query_time_rel+block_length*1000>signal_time,1,'last');
+    ind1=ind0+block_length-1;
+    %if ~(isempty(ind0) || isempty(ind1) || abs(query_time_rel-signal_time(ind0))>dt || abs(query_time_rel+block_length*1000-signal_time(ind1))>dt)
+    if ~(isempty(ind0) || ind1>size(signal,1))
         try 
             block(:,ct)=signal(ind0:ind1);
             block_time(:,ct)=signal_time(ind0:ind1);

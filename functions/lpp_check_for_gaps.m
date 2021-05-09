@@ -12,6 +12,7 @@ function [checked, checked_time] = lpp_check_for_gaps(signal,time,maxgap)
 % -------------------------------------------------------------------------------------------------
 % Output:
 %   checked = New time series without gaps. NaN if gap too large. Logical is no max gap is provided.
+%             New times series is cut to be the same length as input time series.
 %   checked_time = Time vecotor [ms] for the new time series. Not provided if maxgap in not defined.
 % -------------------------------------------------------------------------------------------------
 % This function is a part of the LainePoiss Processing package.
@@ -36,20 +37,23 @@ for n=1:size(p.Results.Signal,2)
         checked_time=[];
     else
         if max(diff(p.Results.Time(:,n)))>samplingtime
-            if max(diff(p.Results.Time(:,n)))<=maxgap
-               newtime=int64(p.Results.Time(:,1):samplingtime:p.Results.Time(:,end));
-               r=ismember(newtime,int64(p.Results.Time(:,n)));
-               N=size(p.Results.Signal,1);
+            newtime=int64(p.Results.Time(1,n):samplingtime:p.Results.Time(end,n))';
+            r=ismember(newtime,int64(p.Results.Time(:,n)));
+            N=size(p.Results.Signal,1);
 
-               junk=NaN*ones(length(newtime),1);
-               junk(r)=p.Results.Signal(:,n);
+            junk=NaN*ones(length(newtime),1);
+            junk(r)=p.Results.Signal(:,n);
+            
+            checked_time(:,n)=double(newtime(1:N));
+            if max(diff(p.Results.Time(:,n)))<=maxgap
+               
                junk=interpNaN(junk);
                checked(:,n)=junk(1:N);
 
-               checked_time(:,n)=double(newtime(1:N));
+               
             else % Too large gap to interpolate
-                checked(:,n)=p.Results.Signal(:,n)*NaN;
-                checked_time(:,n)=p.Results.Time(:,n)*NaN;
+                checked(:,n)=junk(1:N); % The gap is filled with NaNs
+                
             end
         else % Return original signal if no gaps are found
             checked(:,n)=p.Results.Signal(:,n);
