@@ -1,6 +1,6 @@
 function param=lpp_directional_wave_parameters(spec,varargin)
 %param=lpp_wave_parameters: Calculates wave parameters from power spectra.
-%Example: param = lpp_wave_parameters(spec,'list',{'meandir','pdir'},'f0',0.05,'f1',1.28)
+%Example: param = lpp_directional_wave_parameters(spec,'list',{'meandir','pdir'},'f0',0.05,'f1',1.28)
 % ---------------------------------------------------------------------------------------------------------
 % Input:
 % [Required]
@@ -65,7 +65,7 @@ for pp=1:length(p.Results.List)
             a1_mean=sum(a1.*E.*df/m0);
             b1_mean=sum(b1.*E.*df/m0);
             mm1=sqrt(power(a1_mean,2)+power(b1_mean,2));
-            param.meanspread=sqrt(2-2*mm1)
+            param.meanspread=(sqrt(2-2*mm1))*180/pi;
         case 'pdir'
             dirnaut=round(atan2d(a1,b1)+180); 
             [~,kus]=max(E); 
@@ -73,10 +73,10 @@ for pp=1:length(p.Results.List)
         case 'pspread'
             mm1=sqrt(power(a1,2)+power(b1,2));
             
-            fspread=round(sqrt(2*(1-mm1))*180/pi);
+            fspread=sqrt(2*(1-mm1))*180/pi;
             
             [~,kus]=max(E); 
-            mm1(kus)
+        
             param.pspread=fspread(kus); 
         otherwise
             warning('Unknown wave parameter %s ignored.',parameter)
