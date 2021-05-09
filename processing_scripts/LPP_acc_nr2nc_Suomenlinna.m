@@ -1,4 +1,4 @@
-%% LPP_acc_nr2nc_Suomenlinna.m
+%% LPP_acc_nr2nc.m
 % -------------------------------------------------------------------------------------------------------------------------------
 % This script reads in NR-files (containing acceleration data) and combines the acceleration to a long single time series
 % -------------------------------------------------------------------------------------------------------------------------------
@@ -22,8 +22,8 @@ addpath('../LPP/functions/');
 
 loc='depl_04_01'; % Choose location (folder name)
 
-system(sprintf('ls %s/*NR*.txt > NR.list',loc));
-filelist.lp=importdata('NR.list');
+system(sprintf('ls %s/%s/*NR*.txt > %s/%s/NR.list',loc,run_index,loc,run_index));
+filelist.lp=importdata(sprintf('%s/%s/NR.list',loc,run_index));
 
 % Remove boat ride etc.
 n0=14;
