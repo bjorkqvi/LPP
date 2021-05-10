@@ -33,7 +33,7 @@ parse(p,spec,varargin{:});
 
 %% Decode spectral input and censor frequencies
 f=p.Results.spec.f; % n x 1 vector
-E=p.Results.spec.auto(:,3); % n x m matrix with m being number of spectra
+E=p.Results.spec.Zz; % n x m matrix with m being number of spectra
 a1=p.Results.spec.a1;
 b1=p.Results.spec.b1;
 
@@ -87,10 +87,10 @@ end
 function TF=validSpec(spec)
     TF=false;
     
-    if isstruct(spec) && isfield(spec,'f') && isfield(spec,'auto') && isfield(spec,'a1') && isfield(spec,'b1')
+    if isstruct(spec) && isfield(spec,'f') && isfield(spec,'Zz') && isfield(spec,'a1') && isfield(spec,'b1')
         TF=true;
     else
-        error('First input has to be a struct with fields .psd and .f');
+        error('First input has to be a struct with fields .Pzz and .f');
     end
 end
 
