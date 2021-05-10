@@ -37,8 +37,14 @@ p.Results; % diagnostic
 k_noise=abs(f)<p.Results.fHigh & abs(f)>p.Results.fLow;
 amp=abs(signalFft);
 noise_amp=mean(amp(k_noise));
-scale=(amp-noise_amp)./amp;
+%scale=(amp-noise_amp)./amp;
+
+rf=lpp_response_denoise(f);
+scale=(amp-noise_amp.*(1-rf))./amp;
+
 scale(scale<0)=0;
+scale(isnan(scale))=0;
+
 accFftDenoised=signalFft.*scale;
 
 if nargout > 1
