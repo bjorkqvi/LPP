@@ -18,8 +18,8 @@ function rf=lpp_response(f,varargin)
 
 
 %% Parsing input
-defaultFLow = 0.04; % [Hz]
-defaultFHigh = 0.05; % [Hz]
+defaultFLow = 0.08; % [Hz]
+defaultFHigh = 0.10; % [Hz]
 
 p = inputParser;
 validVector = @(x) isnumeric(x) && isvector(x);
