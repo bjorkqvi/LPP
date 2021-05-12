@@ -104,15 +104,15 @@ for t=1:Nseries
     end
     
     % Average spectra from all the blocks
-    spec.Xx=mean(Pxx,2);  
-    spec.Yy=mean(Pyy,2); 
-    spec.Zz=mean(Pzz,2); 
-    spec.Qzx=mean(Qzx,2); 
-    spec.Qzy=mean(Qzy,2); 
+    spec.Xx(:,t)=mean(Pxx,2);  
+    spec.Yy(:,t)=mean(Pyy,2); 
+    spec.Zz(:,t)=mean(Pzz,2); 
+    spec.Qzx(:,t)=mean(Qzx,2); 
+    spec.Qzy(:,t)=mean(Qzy,2); 
     %spec.a1=mean(a1,2);
     %spec.ab=mean(ab,2);
-    spec.a1=spec.Qzx./(sqrt(spec.Zz.*(spec.Yy+spec.Xx)));
-    spec.b1=spec.Qzy./(sqrt(spec.Zz.*(spec.Yy+spec.Xx)));
+    spec.a1(:,t)=spec.Qzx(:,t)./(sqrt(spec.Zz(:,t).*(spec.Yy(:,t)+spec.Xx(:,t))));
+    spec.b1(:,t)=spec.Qzy(:,t)./(sqrt(spec.Zz(:,t).*(spec.Yy(:,t)+spec.Xx(:,t))));
     
 end
 
