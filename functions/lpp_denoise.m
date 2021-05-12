@@ -39,7 +39,7 @@ amp=abs(signalFft);
 noise_amp=mean(amp(k_noise));
 %scale=(amp-noise_amp)./amp;
 
-rf=lpp_response_denoise(f);
+rf=lpp_response_denoise(f,'fLow',0.08,'fHigh',0.10);
 scale=(amp-noise_amp.*(1-rf))./amp;
 
 scale(scale<0)=0;

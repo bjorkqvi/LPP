@@ -49,15 +49,26 @@ elev=zeros(Nfft,N);
 for col=1:N
     accFft=fftshift(fft(detrend(signal(:,col)))) ; % Take the Fast Fourier Transfrom of signal
 
-    if p.Results.denoise 
+    % Integrate without denoising
+    elevFft_hat=accFft.*rf;
+    if p.Results.denoise % Denoising requested
+               
+        % Denoise and integrate acceleration signal
         [accFftDenoised,noiseNorm]=lpp_denoise(accFft,f);
-        elevFft=accFftDenoised.*rf;
-    else
-        elevFft=accFft.*rf;
+        elevFft0=accFftDenoised.*rf;
+        
+        % Renormalize the energy that was lost
+        r=abs(f)>0.1;
+        elevFft=elevFft0;
+        elevFft(r)=elevFft(r)*sqrt(sum(abs(elevFft_hat).^2)/sum(abs(elevFft0).^2));
+        
+    else % No denoising required, use the original integrated signal
+        elevFft=elevFft_hat;
+        
         noiseNorm=NaN;
     end
 
-elev(:,col)=detrend(real(ifft(fftshift(elevFft))));
+    elev(:,col)=detrend(real(ifft(fftshift(elevFft))));
 end
 
 if p.Results.cutTransients 
