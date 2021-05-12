@@ -42,15 +42,13 @@ ind0=find(f>=p.Results.F0,1,'first');
 ind1=find(f<=p.Results.F1,1,'last');
 f=f(ind0:ind1);
 E=E(ind0:ind1,:);
-a1=a1(ind0:ind1);
-b1=b1(ind0:ind1);
+a1=a1(ind0:ind1,:);
+b1=b1(ind0:ind1,:);
 fmat=repmat(f,1,size(E,2));
 
 %% Moments
-m0=trapz(f,E)';
-m1=trapz(f,E.*fmat)';
-m_1=trapz(f,E./fmat)';
-m2=trapz(f,E.*fmat.^2)';
+m0=trapz(f,E);
+
 df=f(2)-f(1);
 %% Calculate actual parameters
 for pp=1:length(p.Results.List)
@@ -58,26 +56,26 @@ for pp=1:length(p.Results.List)
 
     switch parameter
         case 'meandir' 
-            a1_mean=sum(a1.*E.*df/m0);
-            b1_mean=sum(b1.*E.*df/m0);
-            param.meandir=round(atan2d(a1_mean,b1_mean)+180);
+            a1_mean=sum(a1.*E.*df./m0);
+            b1_mean=sum(b1.*E.*df./m0);
+            param.meandir(:,1)=round(atan2d(a1_mean,b1_mean)+180);
         case 'meanspread'
-            a1_mean=sum(a1.*E.*df/m0);
-            b1_mean=sum(b1.*E.*df/m0);
+            a1_mean=sum(a1.*E.*df./m0);
+            b1_mean=sum(b1.*E.*df./m0);
             mm1=sqrt(power(a1_mean,2)+power(b1_mean,2));
-            param.meanspread=(sqrt(2-2*mm1))*180/pi;
+            param.meanspread(:,1)=(sqrt(2-2*mm1))*180/pi;
         case 'pdir'
             dirnaut=round(atan2d(a1,b1)+180); 
-            [~,kus]=max(E); 
-            param.pdir=dirnaut(kus); 
+            [~,kus]=max(E,[],1); 
+            param.pdir(:,1)=dirnaut(kus); 
         case 'pspread'
             mm1=sqrt(power(a1,2)+power(b1,2));
             
             fspread=sqrt(2*(1-mm1))*180/pi;
             
-            [~,kus]=max(E); 
+            [~,kus]=max(E,[],1); 
         
-            param.pspread=fspread(kus); 
+            param.pspread(:,1)=fspread(kus); 
         otherwise
             warning('Unknown wave parameter %s ignored.',parameter)
     end
