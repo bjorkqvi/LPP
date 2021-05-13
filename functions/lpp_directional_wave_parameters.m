@@ -42,6 +42,7 @@ ind0=find(f>=p.Results.F0,1,'first');
 ind1=find(f<=p.Results.F1,1,'last');
 f=f(ind0:ind1);
 E=E(ind0:ind1,:);
+[a,b]=size(E);
 a1=a1(ind0:ind1,:);
 b1=b1(ind0:ind1,:);
 fmat=repmat(f,1,size(E,2));
@@ -67,15 +68,22 @@ for pp=1:length(p.Results.List)
         case 'pdir'
             dirnaut=round(atan2d(a1,b1)+180); 
             [~,kus]=max(E,[],1); 
-            param.pdir(:,1)=dirnaut(kus); 
+            
+            for ind=1:b
+                
+            param.pdir(ind,1)=dirnaut(kus(ind),ind);
+        
+            end
         case 'pspread'
             mm1=sqrt(power(a1,2)+power(b1,2));
             
             fspread=sqrt(2*(1-mm1))*180/pi;
             
             [~,kus]=max(E,[],1); 
-        
-            param.pspread(:,1)=fspread(kus); 
+            for ind=1:b
+                
+            param.pspread(ind,1)=fspread(kus(ind),ind);
+            end
         otherwise
             warning('Unknown wave parameter %s ignored.',parameter)
     end
