@@ -9,7 +9,8 @@
 % [Pre-processing scripts]
 %	LPP_acc_nr2nc_Suomenlinna.m
 % [Post-processing scripts]
-%	LPP_disp2spec_Suomenlinna.m (doesn't exist yet!)
+%	LPP_disp2spec_Suomenlinna.m
+%	LPP_disp2cross_spec_Suomenlinna.m
 % -------------------------------------------------------------------------------------------------------------------------------
 % This script is a part of the LainePoiss Processing package.
 % Jan-Victor Björkqvist & Victor Alari (2021)
@@ -23,7 +24,9 @@ addpath('../LPP/functions/')
 loc='Suomenlinna';
 yyyy=2020;
 run_index='depl_04_01'; % Choose location (folder name)
-Fn=sprintf('netcdf/AccZ_%s%.0f_%s.nc',loc,yyyy,run_index); 
+%Fn=sprintf('netcdf/AccZ_%s%.0f_%s.nc',loc,yyyy,run_index); 
+Fn=sprintf('netcdf/AccX_%s%.0f_%s.nc',loc,yyyy,run_index) 
+%Fn=sprintf('netcdf/AccY_%s%.0f_%s.nc',loc,yyyy,run_index) 
 
 %% Data settings
 fsIn=50;
@@ -58,7 +61,7 @@ signal_filtered = lpp_fir(block);
 
 signal_interpolated = lpp_interpolate(signal_filtered,'fsIn',fsIn,'fsOut',fsOut,'method','nearest');
 
-displacement = lpp_integrate(signal_interpolated,fsOut);
+displacement = lpp_integrate(signal_interpolated,fsOut,'denoise',false);
 %----------------------------------------------------------------------------------------------------
 
 %% Cut down to exactly 30 minutes
@@ -75,5 +78,5 @@ up_time=block_time(n_start:n_start+n_length-1,:);
 timevec_UTC=roundto30min(lpp_shift_time(time0+seconds(up_time(1,:)/1000)',time_shift,'LPtoUTC')+minutes(1)); 
 
 %% Write to netcdf
-Fn=sprintf('netcdf/up_30min_%s%.0f_%s.nc',loc,yyyy,run_index);
+Fn=sprintf('netcdf/east_30min_not_denoised_%s%.0f_%s.nc',loc,yyyy,run_index);
 lpp_write_netcdf_raw(Fn,displacement,timevec_UTC,'name',loc,'run_index',run_index);

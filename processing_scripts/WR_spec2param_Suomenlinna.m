@@ -14,7 +14,7 @@ spec.f=ncread(Fn,'f');
 spec.psd=ncread(Fn,'spec');
 
 %% Calculate spectra
-param=lpp_wave_parameters(spec);
+param=lpp_wave_parameters(spec,'f0',0.1);
 param.time=time0;
 
 %% Write to netcdf

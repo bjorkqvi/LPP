@@ -1,5 +1,5 @@
-function lpp_write_netcdf_waveparam(filename,param,time0,varargin)
-%lpp_write_netcdf_waveparam(filename,param,time0,varargin)
+function lpp_write_netcdf_dir_param(filename,param,time0,varargin)
+%lpp_write_netcdf_dir_param(filename,param,time0,varargin)
 %Example: lpp_write_netcdf_raw('Suomenlinna_2020_depl_04_01.nc',signal,time0,'name','Suomenlinna','run_index','2020_depl_04_01')
 % -------------------------------------------------------------------------------------------------------------------------------
 % Input:
@@ -19,17 +19,22 @@ function lpp_write_netcdf_waveparam(filename,param,time0,varargin)
 % Jan-Victor Björkqvist & Victor Alari (2021)
 % -------------------------------------------------------------------------------------------------------------------------------
 %% Parsing input
+defaultFs=5.12;
 defaultLongitude = []; 
 defaultLatitude = [];
 defaultName = [];
 defaultDepth = [];
 defaultRunIndex = [];
 defaultNote = [];
+defaultSource = 'LainePoiss wave buoy';
+defaultInstitution = 'Department of Marine Systems, Tallinn University of Technology';
 
 p = inputParser;
 addRequired(p,'Filename', @ischar);
 addRequired(p,'Param', @isstruct);
 addRequired(p,'Time0',@isdatetime);
+addParameter(p,'institution',defaultInstitution, @ischar);
+addParameter(p,'source',defaultSource, @ischar);
 addParameter(p,'fs',defaultFs, @isnumeric);
 addParameter(p,'longitude',defaultLongitude,@isnumeric);
 addParameter(p,'latitude',defaultLatitude,@isnumeric);
@@ -60,7 +65,7 @@ netcdf.putAtt(ncid, NC_GLOBAL,'source','LainePoiss wave buoy');
 netcdf.putAtt(ncid, NC_GLOBAL,'CreationDate',datestr(now,'yyyy-mm-ddTHH:MM:SS'));
 
 %% Optional attributes
-fns={'longitude','latitude','name','depth','run_index','note'};
+fns={'institution','source','longitude','latitude','name','depth','run_index','note'};
 for n=1:length(fns)
     fn=fns{n};
    if ~isempty(p.Results.(fn))
@@ -84,25 +89,22 @@ netcdf.defVarFill(ncid,varid,false,fillValue);
 netcdf.putVar(ncid,varid,posixtime(time0));
 
 % Define metadata
-std_name.hs='hs';
-long_name.hs='significant wave height hm0';
-units.hs='metres';
+std_name.meandir='meandir';
+long_name.meandir='mean wave direction from';
+units.meandir='degrees';
 
-std_name.tp='tp';
-long_name.tp='wave period at spectral peak';
-units.tp='seconds';
+std_name.pdir='pdir';
+long_name.pdir='mean wave direction from at spectral peak';
+units.pdir='degrees';
 
-std_name.tm01='tm01';
-long_name.tm01='inverse of the mean frequency tm01';
-units.tm01='seconds';
+std_name.meanspread='meanspread';
+long_name.meanspread='mean spreading';
+units.meanspread='degrees';
 
-std_name.tm_10='tm_10';
-long_name.tm_10='mean wave period tm_10';
-units.tm_10='seconds';
+std_name.pspread='pspread';
+long_name.pspread='spreading at spectral peak';
+units.pspread='degrees';
 
-std_name.tm02='tm02';
-long_name.tm02='spectral zero-crossing wave period tm02';
-units.tm02='seconds';
 
 % Displacement data
 fn=fieldnames(p.Results.Param);

@@ -23,7 +23,7 @@ addpath('../LPP/functions/')
 loc='Suomenlinna';
 yyyy=2020;
 run_index='depl_04_01'; % Choose location (folder name)
-Fn=sprintf('netcdf/spec_30min_%s%.0f_%s.nc',loc,yyyy,run_index); 
+Fn=sprintf('netcdf/spec_30min_renorm_%s%.0f_%s.nc',loc,yyyy,run_index); 
 
 %% Get times and raw data blocks
 time0=datetime(ncread(Fn,'time'),'convertfrom','posixtime');
@@ -31,9 +31,9 @@ spec.f=ncread(Fn,'f');
 spec.psd=ncread(Fn,'spec');
 
 %% Calculate spectra
-param=lpp_wave_parameters(spec);
+param=lpp_wave_parameters(spec,'f1',0.64,'f0',0.1);
 param.time=time0;
 
 %% Write to netcdf
-Fn=sprintf('netcdf/param_30min_%s%.0f_%s.nc',loc,yyyy,run_index);
+Fn=sprintf('netcdf/param_30min_renorm_%s%.0f_%s.nc',loc,yyyy,run_index);
 lpp_write_netcdf_param(Fn,param,time0,'name',loc,'run_index',run_index);

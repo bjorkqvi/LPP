@@ -34,7 +34,10 @@ system(sprintf('ls %s/%s/*NR*.txt > %s/%s/NR.list',loc,run_index,loc,run_index))
 filelist.lp=importdata(sprintf('%s/%s/NR.list',loc,run_index));
 
 ct=1;
-for n=14:(length(filelist.lp)-184)
+n0=14;
+%n1=(length(filelist.lp)-184):
+n1=14;
+for n=n0:n1
 %for n=3491:3492%(length(filelist.lp)-184)
     disp(n)
     fn=filelist.lp{n};
@@ -47,11 +50,11 @@ for n=14:(length(filelist.lp)-184)
 
     signal_interpolated = lpp_interpolate(signal_filtered,'fsIn',50,'fsOut',5.12,'method','nearest');
     
-    displacement(:,:,ct) = lpp_integrate(signal_interpolated,5.12,'denoise', false);
+    displacement(:,:,ct) = lpp_integrate(signal_interpolated,5.12,'denoise', true);
 
     ct=ct+1;
 end
-
+return
 %% The time drifts approximately 60 seconds per month
 time0=lpp_shift_time(time0,time_shift,'LPtoUTC'); 
 
