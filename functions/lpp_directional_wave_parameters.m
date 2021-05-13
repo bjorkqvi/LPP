@@ -88,7 +88,7 @@ function TF=validSpec(spec)
     if isstruct(spec) && isfield(spec,'f') && isfield(spec,'Zz') && isfield(spec,'a1') && isfield(spec,'b1')
         TF=true;
     else
-        error('First input has to be a struct with fields .Pzz and .f');
+        error('First input has to be a struct with fields .Zz and .f');
     end
 end
 
