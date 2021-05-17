@@ -84,7 +84,7 @@ dimid.T = netcdf.defDim(ncid,'time', Ntime);
 varid = netcdf.defVar(ncid,'time','double',dimid.T);         
 netcdf.putAtt(ncid,varid,'standard_name','time');
 netcdf.putAtt(ncid,varid,'long_name','starting time of each block of data');
-netcdf.putAtt(ncid,varid,'units','milliseconds since 1970-01-01T00:00:00');
+netcdf.putAtt(ncid,varid,'units','seconds since 1970-01-01T00:00:00');
 netcdf.defVarFill(ncid,varid,false,fillValue);
 netcdf.putVar(ncid,varid,posixtime(time0));
 

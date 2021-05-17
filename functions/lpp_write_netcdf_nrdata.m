@@ -88,7 +88,7 @@ dimid.samp = netcdf.defDim(ncid,'samples',Nsamples);
 varid = netcdf.defVar(ncid,'time','double',dimid.samp);         
 netcdf.putAtt(ncid,varid,'standard_name','time');
 netcdf.putAtt(ncid,varid,'long_name','time stamp of wave buoy');
-netcdf.putAtt(ncid,varid,'units',sprintf('milliseconds since %s',datestr(p.Results.Time0)));
+netcdf.putAtt(ncid,varid,'units',sprintf('seconds since %s',datestr(p.Results.Time0)));
 netcdf.defVarFill(ncid,varid,false,fillValue);
 netcdf.putVar(ncid,varid,p.Results.Time);
 
