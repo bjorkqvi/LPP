@@ -97,6 +97,10 @@ std_name.tp='tp';
 long_name.tp='wave period at spectral peak';
 units.tp='seconds';
 
+std_name.tc='tc';
+long_name.tc='characteristic wave period (inverse of fm with E**4 weight)';
+units.tc='seconds';
+
 std_name.tm01='tm01';
 long_name.tm01='inverse of the mean frequency tm01';
 units.tm01='seconds';
@@ -108,6 +112,10 @@ units.tm_10='seconds';
 std_name.tm02='tm02';
 long_name.tm02='spectral zero-crossing wave period tm02';
 units.tm02='seconds';
+
+std_name.kappa='kappa';
+long_name.kappa='kappa**2 spectral width parameter';
+units.kappa='-';
 
 % Displacement data
 fn=fieldnames(p.Results.Param);

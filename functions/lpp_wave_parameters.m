@@ -20,7 +20,7 @@ function param=lpp_wave_parameters(spec,varargin)
 %% Parsing input
 defaultF0 = 0.05; % Lowest frequency to use [Hz] (default 0.05)
 defaultF1 = 1.28; % Highest frequency to use [Hz] (default 1.28)
-defaultList = {'hs','tp','tm01','tm_10','tm02'}; % List of parameters
+defaultList = {'hs','tp','tc','tm_10','tm01','tm02','kappa'}; % List of parameters
 
 p = inputParser;
 validList = @(x) iscell(x) && ischar(x{1});
@@ -47,6 +47,13 @@ m0=trapz(f,E)';
 m1=trapz(f,E.*fmat)';
 m_1=trapz(f,E./fmat)';
 m2=trapz(f,E.*fmat.^2)';
+E4f=trapz(f,E.^4.*fmat)';
+E4T=trapz(f,E.^4./fmat)';
+E4=trapz(f,E.^4)';
+
+m02=repmat(sqrt(m0./m2),1,size(E,1))';
+Ecos=trapz(f,E.*cos(2*pi*fmat.*m02))';
+Esin=trapz(f,E.*sin(2*pi*fmat.*m02))';
 
 %% Calculate actual parameters
 for pp=1:length(p.Results.List)
@@ -63,6 +70,11 @@ for pp=1:length(p.Results.List)
             param.tm02=sqrt(m0./m2);
         case 'tp'
             param.tp=parabolic_tp_fit(f,E);
+        case 'tc'
+            %param.tc=E4./E4f;
+            param.tc=E4T./E4;
+        case 'kappa'
+            param.kappa=power(m0,-2).*(power(Ecos,2)+power(Esin,2)); 
         otherwise
             warning('Unknown wave parameter %s ignored.',parameter)
     end
